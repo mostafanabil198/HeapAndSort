@@ -14,8 +14,8 @@ import java.util.Collection;
  * @author arabtech
  * @param <T>
  */
-public class BinaryHeap<T extends Comparable<T>> implements IHeap{
-
+public class BinaryHeap<T extends Comparable<T>> implements IHeap {
+    
     @Override
     public INode getRoot() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
@@ -45,5 +45,34 @@ public class BinaryHeap<T extends Comparable<T>> implements IHeap{
     public void build(Collection unordered) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
-    
+
+    class Node<T extends Comparable<T>> implements INode {
+
+        @Override
+        public INode getLeftChild() {
+            throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        }
+
+        @Override
+        public INode getRightChild() {
+            throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        }
+
+        @Override
+        public INode getParent() {
+            throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        }
+
+        @Override
+        public Comparable getValue() {
+            throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        }
+
+        @Override
+        public void setValue(Comparable value) {
+            throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        }
+
+    }
+
 }
