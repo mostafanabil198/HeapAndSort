@@ -20,13 +20,23 @@ public class Sort<T extends Comparable<T>> implements ISort<T> {
 
     @Override
     public void sortSlow(ArrayList<T> unordered) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        if (unordered == null) {
+            return;
+        }
+        int n = unordered.size();
+        for (int i = 0; i < n - 1; i++) {
+            for (int y = 0; y < n - i - 1; y++) {
+                if (unordered.get(y).compareTo(unordered.get(y + 1)) > 0) {
+                    swap(unordered, y, y + 1);
+                }
+            }
+        }
     }
 
     @Override
     public void sortFast(ArrayList<T> unordered) {
         if (unordered == null) {
-            throw new NullPointerException();
+            return;
         }
         mergeSort(unordered, 0, unordered.size() - 1);
     }
@@ -69,4 +79,9 @@ public class Sort<T extends Comparable<T>> implements ISort<T> {
         }
     }
 
+    private void swap(ArrayList<T> arr, int i1, int i2) {
+        T temp = arr.get(i2);
+        arr.set(i2, arr.get(i1));
+        arr.set(i1, temp);
+    }
 }
