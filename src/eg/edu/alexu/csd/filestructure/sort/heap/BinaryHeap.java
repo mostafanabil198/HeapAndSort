@@ -7,70 +7,102 @@ package eg.edu.alexu.csd.filestructure.sort.heap;
 
 import eg.edu.alexu.csd.filestructure.sort.IHeap;
 import eg.edu.alexu.csd.filestructure.sort.INode;
+import java.util.ArrayList;
 import java.util.Collection;
+import javax.management.RuntimeErrorException;
 
 /**
  *
  * @author arabtech
  * @param <T>
  */
-public class BinaryHeap<T extends Comparable<T>> implements IHeap {
-    
+public class BinaryHeap<T extends Comparable<T>> implements IHeap<T> {
+
+    private ArrayList<INode<T>> heap;
+
+    public BinaryHeap() {
+        heap = new ArrayList<>();
+        heap.add(new Node(0, null));
+    }
+
     @Override
-    public INode getRoot() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public INode<T> getRoot() {
+        if (heap.isEmpty()) {
+            return null;
+        }
+        return heap.get(1);
     }
 
     @Override
     public int size() {
+        return heap.size() - 1;
+    }
+
+    @Override
+    public void heapify(INode<T> node) {
+
+    }
+
+    @Override
+    public T extract() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
-    public void heapify(INode node) {
+    public void insert(T element) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
-    public Comparable extract() {
+    public void build(Collection<T> unordered) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
-    @Override
-    public void insert(Comparable element) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
+    class Node<T extends Comparable<T>> implements INode<T> {
 
-    @Override
-    public void build(Collection unordered) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
+        private int index;
+        private T value;
 
-    class Node<T extends Comparable<T>> implements INode {
-
-        @Override
-        public INode getLeftChild() {
-            throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        public Node(int i, T value) {
+            this.index = i;
+            this.value = value;
         }
 
         @Override
-        public INode getRightChild() {
-            throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        public INode<T> getLeftChild() {
+            if (index * 2 < heap.size()) {
+                return (INode<T>) heap.get(index * 2);
+            } else {
+                return null;
+            }
         }
 
         @Override
-        public INode getParent() {
-            throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        public INode<T> getRightChild() {
+            if (index * 2 + 1 < heap.size()) {
+                return (INode<T>) heap.get(index * 2 + 1);
+            } else {
+                return null;
+            }
         }
 
         @Override
-        public Comparable getValue() {
-            throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        public INode<T> getParent() {
+            if (index / 2 > 0 && heap.size() > 1) {
+                return (INode<T>) heap.get(index / 2);
+            } else {
+                return null;
+            }
         }
 
         @Override
-        public void setValue(Comparable value) {
-            throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        public T getValue() {
+            return value;
+        }
+
+        @Override
+        public void setValue(T value) {
+            this.value = value;
         }
 
     }
