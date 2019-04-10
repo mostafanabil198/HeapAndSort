@@ -5,7 +5,10 @@
  */
 package eg.edu.alexu.csd.filestructure.sort;
 
+import eg.edu.alexu.csd.filestructure.sort.heap.BinaryHeap;
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -15,7 +18,18 @@ public class Sort<T extends Comparable<T>> implements ISort<T> {
 
     @Override
     public IHeap<T> heapSort(ArrayList<T> unordered) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        try {
+            BinaryHeap<T> heap = new BinaryHeap<>();
+            heap.build(unordered);
+            for (int i = heap.size(); i > 1; i--) {
+                heap.exchangeValues();
+                heap.heapify(heap.getRoot());
+            }
+            return (IHeap<T>) heap.clone();
+        } catch (CloneNotSupportedException ex) {
+            Logger.getLogger(Sort.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
     }
 
     @Override

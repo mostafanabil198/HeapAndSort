@@ -19,6 +19,7 @@ import javax.management.RuntimeErrorException;
 public class BinaryHeap<T extends Comparable<T>> implements IHeap<T> {
 
     private ArrayList<INode<T>> heap;
+    private int numOfElements = 0;
 
     public BinaryHeap() {
         heap = new ArrayList<>();
@@ -56,6 +57,24 @@ public class BinaryHeap<T extends Comparable<T>> implements IHeap<T> {
     @Override
     public void build(Collection<T> unordered) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    public void exchangeValues() {
+        T temp = heap.get(1).getValue();
+        heap.get(1).setValue(heap.get(numOfElements).getValue());
+        heap.get(numOfElements).setValue(temp);
+        numOfElements--;
+    }
+
+    @Override
+    public Object clone() throws CloneNotSupportedException {
+        numOfElements = size();
+        BinaryHeap<T> h = new BinaryHeap<>();
+        for (int i = 0; i < this.heap.size(); i++) {
+            h.heap.add(i, (INode<T>) ((Node<T>) this.heap.get(i)).clone());
+        }
+        h.numOfElements = numOfElements;
+        return h;
     }
 
     class Node<T extends Comparable<T>> implements INode<T> {
@@ -103,6 +122,11 @@ public class BinaryHeap<T extends Comparable<T>> implements IHeap<T> {
         @Override
         public void setValue(T value) {
             this.value = value;
+        }
+
+        @Override
+        public Object clone() throws CloneNotSupportedException {
+            return new Node(index, value);
         }
 
     }
