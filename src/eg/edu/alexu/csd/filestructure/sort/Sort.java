@@ -18,18 +18,21 @@ public class Sort<T extends Comparable<T>> implements ISort<T> {
 
     @Override
     public IHeap<T> heapSort(ArrayList<T> unordered) {
+        BinaryHeap<T> heap = new BinaryHeap<>();
         try {
-            BinaryHeap<T> heap = new BinaryHeap<>();
-            heap.build(unordered);
-            for (int i = heap.size(); i > 1; i--) {
-                heap.exchangeValues();
-                heap.heapify(heap.getRoot());
+            if (unordered != null && !unordered.isEmpty()) {
+                heap.build(unordered);
+                for (int i = heap.size(); i > 1; i--) {
+                    heap.exchangeValues();
+                    heap.heapify(heap.getRoot());
+                }
             }
             return (IHeap<T>) heap.clone();
         } catch (CloneNotSupportedException ex) {
             Logger.getLogger(Sort.class.getName()).log(Level.SEVERE, null, ex);
+            return null;
         }
-        return null;
+
     }
 
     @Override

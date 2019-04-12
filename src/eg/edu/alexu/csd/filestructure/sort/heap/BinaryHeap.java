@@ -9,7 +9,7 @@ import eg.edu.alexu.csd.filestructure.sort.IHeap;
 import eg.edu.alexu.csd.filestructure.sort.INode;
 import java.util.ArrayList;
 import java.util.Collection;
-import javax.management.RuntimeErrorException;
+import java.util.Iterator;
 
 /**
  *
@@ -28,7 +28,7 @@ public class BinaryHeap<T extends Comparable<T>> implements IHeap<T> {
 
     @Override
     public INode<T> getRoot() {
-        if (heap.isEmpty()) {
+        if (numOfElements == 0) {
             return null;
         }
         return heap.get(1);
@@ -41,18 +41,20 @@ public class BinaryHeap<T extends Comparable<T>> implements IHeap<T> {
 
     @Override
     public void heapify(INode<T> node) {
-        INode left = node.getLeftChild();
-        INode right = node.getRightChild();
-        INode max = node;
-        if (left != null && left.getValue().compareTo(node.getValue()) > 0) {
-            max = left;
-        }
-        if (right != null && right.getValue().compareTo(max.getValue()) > 0) {
-            max = right;
-        }
-        if (!max.equals(node)) {
-            swap(max, node);
-            heapify(max);
+        if (node != null) {
+            INode left = node.getLeftChild();
+            INode right = node.getRightChild();
+            INode max = node;
+            if (left != null && left.getValue().compareTo(node.getValue()) > 0) {
+                max = left;
+            }
+            if (right != null && right.getValue().compareTo(max.getValue()) > 0) {
+                max = right;
+            }
+            if (!max.equals(node)) {
+                swap(max, node);
+                heapify(max);
+            }
         }
 
     }
@@ -62,27 +64,38 @@ public class BinaryHeap<T extends Comparable<T>> implements IHeap<T> {
         if (numOfElements == 0) {
             return null;
         } else {
-            INode root = heap.get(1);
-            heap.set(1, heap.get(numOfElements));
+            T root = heap.get(1).getValue();
+            swap(heap.get(1), heap.get(numOfElements));
             heap.remove(numOfElements);
             numOfElements--;
-            heapify(heap.get(1));
+            if (numOfElements > 0) {
+                heapify(heap.get(1));
+            }
             return (T) root;
         }
     }
 
     @Override
     public void insert(T element) {
-        numOfElements++;
-        Node node = new Node(numOfElements, element);
-        heap.add(node);
-        heapifyUp(heap.get(numOfElements));
+        if (element != null) {
+            numOfElements++;
+            Node node = new Node(numOfElements, element);
+            heap.add(node);
+            heapifyUp(heap.get(numOfElements));
+        }
     }
 
     @Override
     public void build(Collection<T> unordered) {
-        for (int i = numOfElements / 2; i > 0; i--) {
-            heapify(heap.get(i));
+        if (unordered != null && unordered.size() != 0) {
+            Iterator iter = unordered.iterator();
+            while (iter.hasNext()) {
+                Node<T> n = new Node(++numOfElements, (Comparable) iter.next());
+                heap.add(n);
+            }
+            for (int i = numOfElements / 2; i > 0; i--) {
+                heapify(heap.get(i));
+            }
         }
     }
 
@@ -110,7 +123,7 @@ public class BinaryHeap<T extends Comparable<T>> implements IHeap<T> {
     public Object clone() throws CloneNotSupportedException {
         numOfElements = size();
         BinaryHeap<T> h = new BinaryHeap<>();
-        for (int i = 0; i < this.heap.size(); i++) {
+        for (int i = 1; i < this.heap.size(); i++) {
             h.heap.add(i, (INode<T>) ((Node<T>) this.heap.get(i)).clone());
         }
         h.numOfElements = numOfElements;
