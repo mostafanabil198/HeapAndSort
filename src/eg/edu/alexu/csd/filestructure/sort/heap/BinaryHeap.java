@@ -41,22 +41,62 @@ public class BinaryHeap<T extends Comparable<T>> implements IHeap<T> {
 
     @Override
     public void heapify(INode<T> node) {
+        INode left = node.getLeftChild();
+        INode right = node.getRightChild();
+        INode max = node;
+        if (left != null && left.getValue().compareTo(node.getValue()) > 0) {
+            max = left;
+        }
+        if (right != null && right.getValue().compareTo(max.getValue()) > 0) {
+            max = right;
+        }
+        if (!max.equals(node)) {
+            swap(max, node);
+            heapify(max);
+        }
 
     }
 
     @Override
     public T extract() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        if (numOfElements == 0) {
+            return null;
+        } else {
+            INode root = heap.get(1);
+            heap.set(1, heap.get(numOfElements));
+            heap.remove(numOfElements);
+            numOfElements--;
+            heapify(heap.get(1));
+            return (T) root;
+        }
     }
 
     @Override
     public void insert(T element) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        numOfElements++;
+        Node node = new Node(numOfElements, element);
+        heap.add(node);
+        heapifyUp(heap.get(numOfElements));
     }
 
     @Override
     public void build(Collection<T> unordered) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        for (int i = numOfElements / 2; i > 0; i--) {
+            heapify(heap.get(i));
+        }
+    }
+
+    public void heapifyUp(INode<T> node) {
+        if (node.getParent() != null && node.getParent().getValue().compareTo(node.getValue()) < 0) {
+            swap(node, node.getParent());
+            heapifyUp(node.getParent());
+        }
+    }
+
+    public void swap(INode<T> first, INode<T> second) {
+        T temp = first.getValue();
+        first.setValue(second.getValue());
+        second.setValue(temp);
     }
 
     public void exchangeValues() {
@@ -89,7 +129,7 @@ public class BinaryHeap<T extends Comparable<T>> implements IHeap<T> {
 
         @Override
         public INode<T> getLeftChild() {
-            if (index * 2 < heap.size()) {
+            if (index * 2 <= numOfElements) {
                 return (INode<T>) heap.get(index * 2);
             } else {
                 return null;
@@ -98,7 +138,7 @@ public class BinaryHeap<T extends Comparable<T>> implements IHeap<T> {
 
         @Override
         public INode<T> getRightChild() {
-            if (index * 2 + 1 < heap.size()) {
+            if (index * 2 + 1 <= numOfElements) {
                 return (INode<T>) heap.get(index * 2 + 1);
             } else {
                 return null;
@@ -107,7 +147,7 @@ public class BinaryHeap<T extends Comparable<T>> implements IHeap<T> {
 
         @Override
         public INode<T> getParent() {
-            if (index / 2 > 0 && heap.size() > 1) {
+            if (index / 2 > 0 && numOfElements > 0) {
                 return (INode<T>) heap.get(index / 2);
             } else {
                 return null;
